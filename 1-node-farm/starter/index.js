@@ -1,4 +1,10 @@
 const fs = require('fs');
+const http = require('http');
+const { dirname } = require('path');
+const url = require('url');
+
+////////////////////////////////////////////////////
+//FILES
 
 
 //BLOCKING SYNCHONOS WAY
@@ -10,18 +16,51 @@ const fs = require('fs');
 // console.log('File written')
 
 
-//NON-BLOCKING ASYNCHONOS WAY
-fs.readFile('./txt/start.txt','utf-8',(err,data1)=>{
-  fs.readFile(`./txt/${data1}.txt`,'utf-8',(err,data2)=>{
-  console.log(data2)
-  fs.readFile('./txt/append.txt','utf-8', (err,data3)=>{
-    console.log(data3)
+// //NON-BLOCKING ASYNCHONOS WAY
+// fs.readFile('./txt/start.txt','utf-8',(err,data1)=>{
+//   fs.readFile(`./txt/${data1}.txt`,'utf-8',(err,data2)=>{
+//   console.log(data2)
+//   fs.readFile('./txt/append.txt','utf-8', (err,data3)=>{
+//     console.log(data3)
 
-    fs.writeFile('./txt/final.txt',`${data2}\n${data3}`,'utf-8', err =>{
-      console.log("The file has been writen")
+//     fs.writeFile('./txt/final.txt',`${data2}\n${data3}`,'utf-8', err =>{
+//       console.log("The file has been writen")
       
+//     })
+//   })
+//   })
+// })
+// console.log('Will read File')
+
+////////////////////////////////////////////////////
+//SERVER
+//First we created the server and sevond we use starserver, to ear incoming request
+
+const data = fs.readFileSync('utf-8', (err,data)=>{
+});
+const dataObj = JSON.parse(data)
+
+
+
+const server = http.createServer((req,res) => { //creating the server
+  const pathName = req.url;
+
+  if(pathName === '/' || pathName  === '/overview'){
+    res.end = ('Yhis is a OVERVIEW')
+  }else if(pathName === '/' || pathName === '/product'){
+    res.end(' This is a Product')
+  }else if (pathName === '/api'){
+      res.writeHead(200,{'Content-type':'application/json'})
+      res.end(dataObj)
+  }else{
+    res.writeHead(404,{
+      'Content-type':'text/html',
+      'my-own-header':'hello world'
     })
-  })
-  })
+    res.end('Page not found')
+  }
 })
-console.log('Will read File')
+
+server.listen(8000,'127.0.0.1',()=>{
+  console.log('Listen request on port 8000')
+}) //starting the server 
