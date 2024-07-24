@@ -59,16 +59,18 @@ const dataObj = JSON.parse(data)
 
 
 const server = http.createServer((req,res) => { //creating the server
+  // console.log(req.url)
+  // console.log(req.parse(req.url,true))
   const pathName = req.url;
 
   //Overview Page
-  if(pathName === '/'){
+  if(pathName === '/home'){
     res.writeHead(200,{'Content-type':'text/html'})
 
     const cardsHtml = dataObj.map(el=> replaceTemplate(tempCard,el))
     const output = tempOverview.replace('{%PRODUCT_CARDS%}',cardsHtml)
 
-    res.end = (output)
+    res.end = output
 
 
     //Product Page
